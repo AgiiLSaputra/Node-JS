@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil - TokoBuku</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="logo">TokoBuku</a>
+      <div class="nav-links">
+        <a href="/index.html">Beranda</a>
+        <a href="/blog.html">Blog</a>
+        <a href="/shop.html">Toko</a>
+        <a href="/cart.html" class="cart-link" id="cartLink">
+          Keranjang <span class="cart-badge" id="cartBadge">0</span>
+        </a>
+        <div id="authNav"></div>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">&#9776;</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Profil Saya</h1>
+
+    <div class="profile-grid">
+      <div class="card">
+        <div class="card-body">
+          <h3>Informasi Akun</h3>
+          <div class="profile-info">
+            <p><strong>Nama:</strong> <span id="userName">-</span></p>
+            <p><strong>Email:</strong> <span id="userEmail">-</span></p>
+            <p><strong>Peran:</strong> <span id="userRole" class="badge">-</span></p>
+            <p><strong>Bergabung:</strong> <span id="userJoined">-</span></p>
+          </div>
+
+          <div id="adminOrdersSection" style="display: none;">
+            <h3 class="mt-4">Kelola Pesanan</h3>
+            <div id="adminOrders"></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h3>Pesanan Saya</h3>
+            <div id="myOrders">
+              <p class="text-muted">Memuat pesanan...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h3>Artikel Saya</h3>
+            <div id="myPosts">
+              <p class="text-muted">Memuat artikel...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container"><p>Proyek Hari 2 - REST API dengan PostgreSQL</p></div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/nav.js"></script>
+  <script>
+    const statusLabels = {
+      PENDING: 'Menunggu',
+      PAID: 'Dibayar',
+      SHIPPED: 'Dikirim',
+      DELIVERED: 'Diterima',
+      CANCELLED: 'Dibatalkan'
+    };
+
+    async function loadProfile() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      document.getElementById('userName').textContent = user.name;
+      document.getElementById('userEmail').textContent = user.email;
+      document.getElementById('userRole').textContent = user.role;
+      document.getElementById('userRole').className = `badge badge-${user.role.toLowerCase()}`;
+
+      if (user.role === 'ADMIN') {
+        document.getElementById('adminOrdersSection').style.display = 'block';
+        loadAdminOrders();
+      }
+
+      loadMyOrders();
+      loadMyPosts();
+    }
+
+    async function loadMyOrders() {
+      const result = await API.get('/api/ecommerce/orders');
+      const container = document.getElementById('myOrders');
+
+      if (result.success && result.data.orders.length) {
+        container.innerHTML = result.data.orders.map(order => `
+          <div class="order-item">
+            <div class="order-header">
+              <span>Order #${order.id}</span>
+              <span class="badge badge-${order.status.toLowerCase()}">${statusLabels[order.status]}</span>
+            </div>
+            <p class="text-sm text-muted">${new Date(order.createdAt).toLocaleDateString('id-ID')}</p>
+            <p><strong>Rp ${order.totalAmount.toLocaleString('id-ID')}</strong></p>
+            <p class="text-sm">${order.items.length} produk</p>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = '<p class="text-muted">Belum ada pesanan.</p>';
+      }
+    }
+
+    async function loadAdminOrders() {
+      const result = await API.get('/api/ecommerce/orders/all');
+      const container = document.getElementById('adminOrders');
+
+      if (result.success && result.data.orders.length) {
+        container.innerHTML = result.data.orders.map(order => `
+          <div class="order-item">
+            <div class="order-header">
+              <span>Order #${order.id} - ${order.user.name}</span>
+              <select onchange="updateStatus(${order.id}, this.value)" class="select-sm">
+                ${Object.keys(statusLabels).map(s =>
+                  `<option value="${s}" ${order.status === s ? 'selected' : ''}>${statusLabels[s]}</option>`
+                ).join('')}
+              </select>
+            </div>
+            <p class="text-sm text-muted">${new Date(order.createdAt).toLocaleDateString('id-ID')}</p>
+            <p><strong>Rp ${order.totalAmount.toLocaleString('id-ID')}</strong></p>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = '<p class="text-muted">Belum ada pesanan.</p>';
+      }
+    }
+
+    async function updateStatus(orderId, status) {
+      await API.put(`/api/ecommerce/orders/${orderId}/status`, { status });
+      loadAdminOrders();
+    }
+
+    async function loadMyPosts() {
+      const result = await API.get('/api/blog/my-posts');
+      const container = document.getElementById('myPosts');
+
+      if (result.success && result.data.posts.length) {
+        container.innerHTML = result.data.posts.map(post => `
+          <div class="post-item">
+            <h4>${post.title}</h4>
+            <div class="post-item-meta">
+              <span class="badge ${post.published ? 'badge-success' : 'badge-warning'}">
+                ${post.published ? 'Diterbitkan' : 'Draf'}
+              </span>
+              <span class="text-sm text-muted">${post._count.comments} komentar</span>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        container.innerHTML = '<p class="text-muted">Belum ada artikel.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProfile);
+  </script>
+</body>
+</html>
