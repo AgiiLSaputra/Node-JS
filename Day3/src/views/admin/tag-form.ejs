@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="flex">
+  <%- include('../partials/sidebar') %>
+  
+  <main class="flex-1 p-6">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800"><%= tag ? 'Edit Tag' : 'Create Tag' %></h1>
+        <p class="text-gray-500"><%= tag ? 'Update tag name' : 'Add a new tag' %></p>
+      </div>
+      <a href="/admin/tags" class="text-gray-600 hover:text-green-600">
+        <i class="fas fa-arrow-left mr-1"></i>Back
+      </a>
+    </div>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+        <i class="fas fa-exclamation-circle mr-2"></i><%= error %>
+      </div>
+    <% } %>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 max-w-lg">
+      <form action="<%= tag ? '/admin/tags/' + tag.id + '/update' : '/admin/tags/create' %>" method="POST">
+        <div class="mb-6">
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Tag Name *</label>
+          <input type="text" id="name" name="name" required value="<%= tag ? tag.name : '' %>"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none"
+            placeholder="e.g., javascript, nodejs, prisma">
+        </div>
+
+        <div class="flex gap-3">
+          <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+            <i class="fas fa-save mr-2"></i><%= tag ? 'Update' : 'Create' %>
+          </button>
+          <a href="/admin/tags" class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
