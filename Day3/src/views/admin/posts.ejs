@@ -1,0 +1,89 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="flex">
+  <%- include('../partials/sidebar') %>
+  
+  <main class="flex-1 p-6">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Posts</h1>
+        <p class="text-gray-500">Manage all posts</p>
+      </div>
+      <a href="/admin/posts/create" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors">
+        <i class="fas fa-plus mr-2"></i>New Post
+      </a>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+      <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
+        <i class="fas fa-check-circle mr-2"></i><%= success %>
+      </div>
+    <% } %>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">ID</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Title</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Author</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Tags</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% if (posts.length === 0) { %>
+              <tr>
+                <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                  <i class="fas fa-file-alt text-4xl text-gray-300 mb-3 block"></i>
+                  No posts found.
+                </td>
+              </tr>
+            <% } else { %>
+              <% posts.forEach(post => { %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 text-sm text-gray-500"><%= post.id %></td>
+                  <td class="px-6 py-4 font-medium text-gray-800 max-w-xs truncate"><%= post.title %></td>
+                  <td class="px-6 py-4 text-sm text-gray-600"><%= post.author.name || post.author.email %></td>
+                  <td class="px-6 py-4">
+                    <% if (post.published) { %>
+                      <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">Published</span>
+                    <% } else { %>
+                      <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">Draft</span>
+                    <% } %>
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="flex flex-wrap gap-1">
+                      <% post.tags.forEach(tag => { %>
+                        <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"><%= tag.name %></span>
+                      <% }) %>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500"><%= new Date(post.createdAt).toLocaleDateString('id-ID') %></td>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-2">
+                      <a href="/admin/posts/<%= post.id %>/edit" class="text-gray-400 hover:text-green-600" title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <form action="/admin/posts/<%= post.id %>/delete" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
+                        <button type="submit" class="text-gray-400 hover:text-red-600" title="Delete">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
