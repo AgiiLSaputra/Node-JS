@@ -1,0 +1,67 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="flex">
+  <%- include('../partials/sidebar') %>
+  
+  <main class="flex-1 p-6">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Comments</h1>
+        <p class="text-gray-500">Manage all comments</p>
+      </div>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+      <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
+        <i class="fas fa-check-circle mr-2"></i><%= success %>
+      </div>
+    <% } %>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">ID</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Content</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Author</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Post</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% if (comments.length === 0) { %>
+              <tr>
+                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                  <i class="fas fa-comments text-4xl text-gray-300 mb-3 block"></i>
+                  No comments found.
+                </td>
+              </tr>
+            <% } else { %>
+              <% comments.forEach(comment => { %>
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 text-sm text-gray-500"><%= comment.id %></td>
+                  <td class="px-6 py-4 text-sm text-gray-800 max-w-xs truncate"><%= comment.content %></td>
+                  <td class="px-6 py-4 text-sm text-gray-600"><%= comment.author.name || comment.author.email %></td>
+                  <td class="px-6 py-4 text-sm text-gray-600 max-w-xs truncate"><%= comment.post.title %></td>
+                  <td class="px-6 py-4 text-sm text-gray-500"><%= new Date(comment.createdAt).toLocaleDateString('id-ID') %></td>
+                  <td class="px-6 py-4">
+                    <form action="/admin/comments/<%= comment.id %>/delete" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
+                      <button type="submit" class="text-gray-400 hover:text-red-600" title="Delete">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

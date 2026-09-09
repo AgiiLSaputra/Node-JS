@@ -1,0 +1,116 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class="flex">
+  <%- include('../partials/sidebar') %>
+  
+  <main class="flex-1 p-6">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">Dashboard</h1>
+      <p class="text-gray-500">Welcome to the admin panel</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Total Users</p>
+            <p class="text-3xl font-bold text-gray-800"><%= stats.users %></p>
+          </div>
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <i class="fas fa-users text-blue-600 text-xl"></i>
+          </div>
+        </div>
+        <a href="/admin/users" class="text-sm text-green-600 hover:text-green-700 mt-4 inline-block">
+          View all <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Total Posts</p>
+            <p class="text-3xl font-bold text-gray-800"><%= stats.posts %></p>
+          </div>
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+            <i class="fas fa-file-alt text-green-600 text-xl"></i>
+          </div>
+        </div>
+        <a href="/admin/posts" class="text-sm text-green-600 hover:text-green-700 mt-4 inline-block">
+          View all <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Total Comments</p>
+            <p class="text-3xl font-bold text-gray-800"><%= stats.comments %></p>
+          </div>
+          <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+            <i class="fas fa-comments text-yellow-600 text-xl"></i>
+          </div>
+        </div>
+        <a href="/admin/comments" class="text-sm text-green-600 hover:text-green-700 mt-4 inline-block">
+          View all <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500 mb-1">Total Tags</p>
+            <p class="text-3xl font-bold text-gray-800"><%= stats.tags %></p>
+          </div>
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+            <i class="fas fa-tags text-purple-600 text-xl"></i>
+          </div>
+        </div>
+        <a href="/admin/tags" class="text-sm text-green-600 hover:text-green-700 mt-4 inline-block">
+          View all <i class="fas fa-arrow-right ml-1"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Posts -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+      <div class="p-6 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800">Recent Posts</h2>
+      </div>
+      <div class="p-6">
+        <% if (recentPosts.length === 0) { %>
+          <p class="text-gray-500 text-center py-4">No posts yet.</p>
+        <% } else { %>
+          <div class="space-y-4">
+            <% recentPosts.forEach(post => { %>
+              <div class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-file-alt text-green-600"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-800"><%= post.title %></p>
+                    <p class="text-sm text-gray-500">by <%= post.author.name || post.author.email %></p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <% if (post.published) { %>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">Published</span>
+                  <% } else { %>
+                    <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full">Draft</span>
+                  <% } %>
+                  <a href="/admin/posts/<%= post.id %>/edit" class="text-gray-400 hover:text-green-600">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>
