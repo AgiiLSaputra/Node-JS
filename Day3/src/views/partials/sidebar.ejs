@@ -1,0 +1,40 @@
+<aside class="w-64 bg-white border-r border-gray-200 min-h-[calc(100vh-4rem)] hidden md:block">
+  <div class="p-4">
+    <div class="flex items-center gap-2 mb-6 pb-4 border-b border-gray-200">
+      <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+        <i class="fas fa-user-shield text-green-600"></i>
+      </div>
+      <div>
+        <p class="font-semibold text-gray-800 text-sm"><%= user ? user.name || user.email : 'Admin' %></p>
+        <p class="text-xs text-gray-500"><%= user ? user.role : 'admin' %></p>
+      </div>
+    </div>
+    <nav class="space-y-1">
+      <a href="/admin" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+        <i class="fas fa-tachometer-alt w-5"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="/admin/users" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+        <i class="fas fa-users w-5"></i>
+        <span>Users</span>
+      </a>
+      <a href="/admin/posts" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+        <i class="fas fa-file-alt w-5"></i>
+        <span>Posts</span>
+      </a>
+      <a href="/admin/comments" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+        <i class="fas fa-comments w-5"></i>
+        <span>Comments</span>
+      </a>
+      <a href="/admin/tags" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+        <i class="fas fa-tags w-5"></i>
+        <span>Tags</span>
+      </a>
+      <hr class="my-3 border-gray-200">
+      <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+        <i class="fas fa-globe w-5"></i>
+        <span>View Site</span>
+      </a>
+    </nav>
+  </div>
+</aside>
