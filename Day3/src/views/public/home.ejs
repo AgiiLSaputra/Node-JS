@@ -1,0 +1,101 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-green-600 to-green-800 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Day3 ORM</h1>
+      <p class="text-xl text-green-100 mb-8 max-w-2xl mx-auto">
+        Modern ORM with PostgreSQL using Prisma. Explore posts, tags, and comments.
+      </p>
+      <div class="flex justify-center gap-4">
+        <a href="#posts" class="bg-white text-green-700 px-6 py-3 rounded-lg font-semibold hover:bg-green-50 transition-colors">
+          <i class="fas fa-book-open mr-2"></i>Explore Posts
+        </a>
+        <a href="/about" class="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors">
+          Learn More
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="py-12 bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div>
+          <div class="text-3xl font-bold text-green-600"><%= stats.users %></div>
+          <div class="text-gray-500 mt-1">Users</div>
+        </div>
+        <div>
+          <div class="text-3xl font-bold text-green-600"><%= stats.posts %></div>
+          <div class="text-gray-500 mt-1">Posts</div>
+        </div>
+        <div>
+          <div class="text-3xl font-bold text-green-600"><%= stats.comments %></div>
+          <div class="text-gray-500 mt-1">Comments</div>
+        </div>
+        <div>
+          <div class="text-3xl font-bold text-green-600"><%= stats.tags %></div>
+          <div class="text-gray-500 mt-1">Tags</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Posts Section -->
+  <section id="posts" class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800">Latest Posts</h2>
+        <p class="text-gray-500 mt-2">Discover our latest articles and tutorials</p>
+      </div>
+
+      <% if (posts.length === 0) { %>
+        <div class="text-center py-12">
+          <i class="fas fa-file-alt text-6xl text-gray-300 mb-4"></i>
+          <p class="text-gray-500">No posts yet.</p>
+        </div>
+      <% } else { %>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <% posts.forEach(post => { %>
+            <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+              <div class="p-6">
+                <div class="flex items-center gap-2 mb-3">
+                  <% if (post.published) { %>
+                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">Published</span>
+                  <% } else { %>
+                    <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs rounded-full font-medium">Draft</span>
+                  <% } %>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                  <a href="/post/<%= post.id %>" class="hover:text-green-600 transition-colors"><%= post.title %></a>
+                </h3>
+                <p class="text-gray-600 text-sm mb-4 line-clamp-3"><%= post.content || 'No content' %></p>
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <i class="fas fa-user text-green-600 text-xs"></i>
+                    </div>
+                    <span><%= post.author.name || post.author.email %></span>
+                  </div>
+                  <span><%= new Date(post.createdAt).toLocaleDateString('id-ID') %></span>
+                </div>
+                <% if (post.tags.length > 0) { %>
+                  <div class="flex flex-wrap gap-2 mt-4">
+                    <% post.tags.forEach(tag => { %>
+                      <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"><%= tag.name %></span>
+                    <% }) %>
+                  </div>
+                <% } %>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
