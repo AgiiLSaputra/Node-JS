@@ -1,0 +1,101 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-2 text-sm text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-600">Home</a>
+      <i class="fas fa-chevron-right text-xs"></i>
+      <span class="text-gray-800">Post</span>
+    </nav>
+
+    <article class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div class="p-8">
+        <!-- Header -->
+        <div class="mb-6">
+          <div class="flex items-center gap-3 mb-4">
+            <% if (post.published) { %>
+              <span class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full font-medium">Published</span>
+            <% } else { %>
+              <span class="px-3 py-1 bg-gray-100 text-gray-500 text-sm rounded-full font-medium">Draft</span>
+            <% } %>
+            <span class="text-gray-400 text-sm"><%= new Date(post.createdAt).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-800"><%= post.title %></h1>
+        </div>
+
+        <!-- Author -->
+        <div class="flex items-center gap-3 mb-8 pb-6 border-b border-gray-200">
+          <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+            <i class="fas fa-user text-green-600"></i>
+          </div>
+          <div>
+            <p class="font-medium text-gray-800"><%= post.author.name || post.author.email %></p>
+            <p class="text-sm text-gray-500"><%= post.author.email %></p>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="prose prose-green max-w-none mb-8">
+          <p class="text-gray-700 leading-relaxed whitespace-pre-wrap"><%= post.content || 'No content available.' %></p>
+        </div>
+
+        <!-- Tags -->
+        <% if (post.tags.length > 0) { %>
+          <div class="flex flex-wrap gap-2 mb-8 pt-6 border-t border-gray-200">
+            <i class="fas fa-tags text-gray-400 mt-1"></i>
+            <% post.tags.forEach(tag => { %>
+              <span class="px-3 py-1 bg-green-50 text-green-700 text-sm rounded-full border border-green-200"><%= tag.name %></span>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </article>
+
+    <!-- Comments Section -->
+    <section class="mt-8">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">
+        <i class="fas fa-comments text-green-600 mr-2"></i>
+        Comments (<%= post.comments.length %>)
+      </h2>
+
+      <% if (post.comments.length === 0) { %>
+        <div class="bg-white rounded-xl border border-gray-200 p-8 text-center">
+          <i class="fas fa-comment-dots text-4xl text-gray-300 mb-3"></i>
+          <p class="text-gray-500">No comments yet. Be the first to comment!</p>
+        </div>
+      <% } else { %>
+        <div class="space-y-4">
+          <% post.comments.forEach(comment => { %>
+            <div class="bg-white rounded-xl border border-gray-200 p-6">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-user text-green-600 text-sm"></i>
+                </div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="font-medium text-gray-800"><%= comment.author.name || comment.author.email %></span>
+                    <span class="text-gray-400 text-sm">&middot;</span>
+                    <span class="text-gray-400 text-sm"><%= new Date(comment.createdAt).toLocaleDateString('id-ID') %></span>
+                  </div>
+                  <p class="text-gray-700"><%= comment.content %></p>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+
+    <!-- Back Link -->
+    <div class="mt-8">
+      <a href="/" class="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium">
+        <i class="fas fa-arrow-left"></i>
+        Back to Home
+      </a>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>
