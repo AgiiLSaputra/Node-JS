@@ -1,0 +1,81 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1">
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-green-600 to-green-800 text-white py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl font-bold mb-4">About Day3 ORM</h1>
+      <p class="text-xl text-green-100">Learning PostgreSQL ORM with Prisma</p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">What is Prisma?</h2>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          Prisma is a modern ORM (Object-Relational Mapping) for Node.js and TypeScript. 
+          It helps developers interact with databases in a type-safe and intuitive way.
+        </p>
+
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Key Features</h3>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+            <span class="text-gray-600"><strong>Type Safety</strong> - Full TypeScript support with auto-generated types</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+            <span class="text-gray-600"><strong>Auto-generated Client</strong> - Prisma Client is generated based on your schema</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+            <span class="text-gray-600"><strong>Intuitive API</strong> - Simple and readable query syntax</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+            <span class="text-gray-600"><strong>Migrations</strong> - Database schema version control</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fas fa-check-circle text-green-500 mt-1"></i>
+            <span class="text-gray-600"><strong>Prisma Studio</strong> - Visual database browser</span>
+          </li>
+        </ul>
+
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Models in This Project</h3>
+        <div class="grid md:grid-cols-2 gap-4 mb-8">
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <h4 class="font-semibold text-gray-800 mb-2"><i class="fas fa-user text-green-600 mr-2"></i>User</h4>
+            <p class="text-sm text-gray-600">Stores user accounts with email, name, password, and role.</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <h4 class="font-semibold text-gray-800 mb-2"><i class="fas fa-file-alt text-green-600 mr-2"></i>Post</h4>
+            <p class="text-sm text-gray-600">Blog posts with title, content, and published status.</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <h4 class="font-semibold text-gray-800 mb-2"><i class="fas fa-tag text-green-600 mr-2"></i>Tag</h4>
+            <p class="text-sm text-gray-600">Tags for categorizing posts (many-to-many relation).</p>
+          </div>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <h4 class="font-semibold text-gray-800 mb-2"><i class="fas fa-comment text-green-600 mr-2"></i>Comment</h4>
+            <p class="text-sm text-gray-600">Comments on posts by users.</p>
+          </div>
+        </div>
+
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Tech Stack</h3>
+        <div class="flex flex-wrap gap-3">
+          <span class="px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200 font-medium">Node.js</span>
+          <span class="px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200 font-medium">Express.js</span>
+          <span class="px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200 font-medium">Prisma</span>
+          <span class="px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200 font-medium">PostgreSQL</span>
+          <span class="px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200 font-medium">EJS</span>
+          <span class="px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200 font-medium">Tailwind CSS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
