@@ -52,7 +52,6 @@ model Ticket {
   author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   assignee   User?    @relation("AssignedTo", fields: [assigneeId], references: [id], onDelete: SetNull)
   comments   Comment[]
-  auditLogs  AuditLog[]
 
   @@index([status])
   @@index([priority])
@@ -108,8 +107,10 @@ model AuditLog {
   userAgent  String?
   createdAt  DateTime @default(now())
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ticketId Int?      // nullable, karena audit log bisa untuk entity lain selain Ticket
+  ticket   Ticket?   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 
   @@index([entity, entityId])
   @@index([userId])
