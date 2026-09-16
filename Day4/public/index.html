@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticketing System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Auth View -->
+  <div id="auth-view" class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/>
+          <path d="M9 14l2 2 4-4"/>
+        </svg>
+        <h1>Ticketing</h1>
+        <p>Sistem manajemen tiket support</p>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-form">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" id="login-email" class="form-input" placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="Minimal 6 karakter">
+        </div>
+        <button onclick="login()" class="btn btn-primary" style="width: 100%; margin-top: var(--space-4);">
+          Masuk
+        </button>
+        <p style="text-align: center; margin-top: var(--space-4); font-size: var(--text-sm);">
+          Belum punya akun?
+          <a href="#" onclick="showRegister()" style="color: var(--gray-900); font-weight: 500;">Daftar</a>
+        </p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="register-form" class="hidden">
+        <div class="form-group">
+          <label class="form-label">Nama</label>
+          <input type="text" id="register-name" class="form-input" placeholder="Nama lengkap">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" id="register-email" class="form-input" placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="register-password" class="form-input" placeholder="Minimal 6 karakter">
+        </div>
+        <button onclick="register()" class="btn btn-primary" style="width: 100%; margin-top: var(--space-4);">
+          Daftar
+        </button>
+        <p style="text-align: center; margin-top: var(--space-4); font-size: var(--text-sm);">
+          Sudah punya akun?
+          <a href="#" onclick="showLogin()" style="color: var(--gray-900); font-weight: 500;">Masuk</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App View -->
+  <div id="app-view" class="hidden">
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-inner">
+        <div class="header-logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+            <rect x="9" y="3" width="6" height="4" rx="1"/>
+          </svg>
+          <span>Ticketing</span>
+        </div>
+        <nav class="header-nav">
+          <a href="#" onclick="showPage('dashboard')" data-page="dashboard">Dashboard</a>
+          <a href="#" onclick="showPage('tickets')" data-page="tickets">Tiket</a>
+          <a href="#" id="nav-analytics" onclick="showPage('analytics')" data-page="analytics" class="hidden">Analytics</a>
+        </nav>
+        <div class="dropdown" id="user-dropdown">
+          <button class="btn btn-sm" onclick="toggleDropdown()">
+            <div class="avatar" id="user-avatar">A</div>
+            <span id="user-name">User</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="dropdown-menu">
+            <button class="dropdown-item" onclick="showProfile()">Profil</button>
+            <button class="dropdown-item" onclick="logout()">Keluar</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <!-- Dashboard Page -->
+      <div id="page-dashboard" class="page">
+        <div class="page-header">
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Tiket</div>
+            <div class="stat-value" id="stat-total">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Open</div>
+            <div class="stat-value" id="stat-open">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">In Progress</div>
+            <div class="stat-value" id="stat-progress">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Resolved</div>
+            <div class="stat-value" id="stat-resolved">-</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Tiket Terbaru</h3>
+            <button onclick="showPage('tickets')" class="btn btn-sm">Lihat Semua</button>
+          </div>
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Judul</th>
+                  <th>Status</th>
+                  <th>Prioritas</th>
+                  <th>Dibuat</th>
+                </tr>
+              </thead>
+              <tbody id="recent-tickets">
+                <tr>
+                  <td colspan="5" class="empty-state">
+                    <p>Memuat data...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tickets Page -->
+      <div id="page-tickets" class="page hidden">
+        <div class="page-header">
+          <h1 class="page-title">Tiket</h1>
+          <button onclick="openCreateTicketModal()" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Buat Tiket
+          </button>
+        </div>
+
+        <div class="filters">
+          <div class="filter-group">
+            <span class="filter-label">Status</span>
+            <select id="filter-status" class="form-select" style="width: auto;" onchange="loadTickets()">
+              <option value="">Semua</option>
+              <option value="OPEN">Open</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="WAITING">Waiting</option>
+              <option value="RESOLVED">Resolved</option>
+              <option value="CLOSED">Closed</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <span class="filter-label">Prioritas</span>
+            <select id="filter-priority" class="form-select" style="width: auto;" onchange="loadTickets()">
+              <option value="">Semua</option>
+              <option value="LOW">Low</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="HIGH">High</option>
+              <option value="URGENT">Urgent</option>
+            </select>
+          </div>
+          <div class="filter-group" style="flex: 1;">
+            <input type="text" id="filter-search" class="form-input" placeholder="Cari tiket..." style="max-width: 300px;">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Judul</th>
+                  <th>Status</th>
+                  <th>Prioritas</th>
+                  <th>Author</th>
+                  <th>Komentar</th>
+                  <th>Dibuat</th>
+                </tr>
+              </thead>
+              <tbody id="tickets-list">
+                <tr>
+                  <td colspan="7" class="empty-state">
+                    <p>Memuat data...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="tickets-pagination" class="pagination"></div>
+        </div>
+      </div>
+
+      <!-- Ticket Detail Page -->
+      <div id="page-ticket-detail" class="page hidden">
+        <div style="margin-bottom: var(--space-4);">
+          <a href="#" onclick="showPage('tickets')" style="font-size: var(--text-sm); color: var(--gray-500);">
+            &larr; Kembali ke tiket
+          </a>
+        </div>
+
+        <div class="card" id="ticket-detail-content">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Page -->
+      <div id="page-analytics" class="page hidden">
+        <div class="page-header">
+          <h1 class="page-title">Analytics</h1>
+        </div>
+
+        <div class="stats-grid" id="analytics-stats">
+          <div class="stat-card">
+            <div class="stat-label">Total Users</div>
+            <div class="stat-value" id="analytics-users">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Comments</div>
+            <div class="stat-value" id="analytics-comments">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Audit Logs</div>
+            <div class="stat-value" id="analytics-audit">-</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Resolution</div>
+            <div class="stat-value" id="analytics-resolution">-</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6);">
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: var(--space-4);">By Status</h3>
+            <div id="chart-status"></div>
+          </div>
+          <div class="card">
+            <h3 class="card-title" style="margin-bottom: var(--space-4);">By Priority</h3>
+            <div id="chart-priority"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: var(--space-6);">
+          <h3 class="card-title" style="margin-bottom: var(--space-4);">Recent Audit Logs</h3>
+          <div id="audit-logs"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Create Ticket Modal -->
+  <div id="create-ticket-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Buat Tiket Baru</h3>
+        <button class="modal-close" onclick="closeModal('create-ticket-modal')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Judul</label>
+          <input type="text" id="ticket-title" class="form-input" placeholder="Judul tiket">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deskripsi</label>
+          <textarea id="ticket-description" class="form-textarea" placeholder="Jelaskan masalah atau request..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Prioritas</label>
+            <select id="ticket-priority" class="form-select">
+              <option value="LOW">Low</option>
+              <option value="MEDIUM" selected>Medium</option>
+              <option value="HIGH">High</option>
+              <option value="URGENT">Urgent</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kategori</label>
+            <input type="text" id="ticket-category" class="form-input" placeholder="Bug, Feature, dll">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('create-ticket-modal')" class="btn">Batal</button>
+        <button onclick="createTicket()" class="btn btn-primary">Buat Tiket</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profile-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Profil Saya</h3>
+        <button class="modal-close" onclick="closeModal('profile-modal')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Nama</label>
+          <input type="text" id="profile-name" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" id="profile-email" class="form-input">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('profile-modal')" class="btn">Batal</button>
+        <button onclick="updateProfile()" class="btn btn-primary">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
