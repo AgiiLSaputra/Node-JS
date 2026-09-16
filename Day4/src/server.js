@@ -3,9 +3,9 @@ const express = require("express");
 const path = require("path");
 const { PrismaClient } = require("@prisma/client");
 
-// Import middleware
-const softDeleteMiddleware = require("./middleware/softDelete");
-const auditMiddleware = require("./middleware/audit");
+// Import extensions
+const softDeleteExtension = require("./middleware/softDelete");
+const auditExtension = require("./middleware/audit");
 
 // Import routes
 const authRoutes = require("./routes/auth");
@@ -19,11 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 const prisma = new PrismaClient({
   log: ["warn", "error"],
-});
-
-// Register Prisma middleware (WAJIB sebelum dipakai)
-softDeleteMiddleware(prisma);
-auditMiddleware(prisma);
+}).$extends(softDeleteExtension()).$extends(auditExtension());
 
 // ==================== MIDDLEWARE ====================
 
