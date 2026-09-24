@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 5 — Belajar REST API</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Background blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-inner glass">
+      <div class="logo">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        <span>Day 5 · REST API</span>
+      </div>
+      <nav class="nav">
+        <a href="#belajar">Belajar</a>
+        <a href="#tester">API Tester</a>
+        <a href="#daftar">Daftar Buku</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge glass-pill">Node.js · Express · Prisma · PostgreSQL</div>
+      <h1>Belajar <span class="gradient-text">REST API</span> sambil Praktek</h1>
+      <p class="hero-sub">
+        Klik tombol topik di bawah untuk melihat penjelasan, lalu coba langsung API-nya
+        lewat API Tester. Semua berhubungan dengan materi yang dipelajari hari ini.
+      </p>
+    </section>
+
+    <!-- Section Belajar -->
+    <section id="belajar" class="section">
+      <div class="section-head">
+        <h2>📘 Section Belajar</h2>
+        <p>Klik salah satu topik untuk membuka penjelasan lengkap + hubungannya dengan materi hari ini.</p>
+      </div>
+
+      <div class="topic-groups">
+        <div class="glass card">
+          <h3 class="card-title">Tech Stack</h3>
+          <div class="chips" id="chips-stack"></div>
+        </div>
+
+        <div class="glass card">
+          <h3 class="card-title">Konsep REST</h3>
+          <div class="chips" id="chips-rest"></div>
+        </div>
+
+        <div class="glass card">
+          <h3 class="card-title">Status Code</h3>
+          <div class="chips" id="chips-status"></div>
+        </div>
+
+        <div class="glass card">
+          <h3 class="card-title">Prisma ORM</h3>
+          <div class="chips" id="chips-prisma"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section API Tester -->
+    <section id="tester" class="section">
+      <div class="section-head">
+        <h2>🧪 API Tester</h2>
+        <p>Coba request REST API langsung dari browser. Status code yang muncul bisa diklik untuk penjelasan.</p>
+      </div>
+
+      <div class="glass card tester-card">
+        <div class="tester-row">
+          <select id="tester-method" class="glass-input method-select">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+          <input id="tester-path" class="glass-input path-input" type="text" value="/api/books" spellcheck="false">
+          <button id="btn-send" class="btn btn-primary">Send</button>
+        </div>
+
+        <div class="tester-body" id="tester-body-wrap">
+          <label class="field-label">Request Body (JSON)</label>
+          <textarea id="tester-body" class="glass-input body-input" rows="6" spellcheck="false">{
+  "title": "Buku Baru",
+  "author": "Penulis",
+  "year": 2026,
+  "genre": "Fiksi",
+  "description": "Deskripsi buku"
+}</textarea>
+        </div>
+
+        <div class="quick-actions">
+          <span class="field-label">Quick:</span>
+          <button class="chip chip-quick" data-method="GET" data-path="/api/books">GET /api/books</button>
+          <button class="chip chip-quick" data-method="GET" data-path="/api/books/1">GET /api/books/1</button>
+          <button class="chip chip-quick" data-method="POST" data-path="/api/books">POST /api/books</button>
+          <button class="chip chip-quick" data-method="PUT" data-path="/api/books/1">PUT /api/books/1</button>
+          <button class="chip chip-quick" data-method="PATCH" data-path="/api/books/1">PATCH /api/books/1</button>
+          <button class="chip chip-quick" data-method="DELETE" data-path="/api/books/1">DELETE /api/books/1</button>
+        </div>
+
+        <div class="tester-result hidden" id="tester-result">
+          <div class="result-meta">
+            <button id="result-status" class="status-badge" title="Klik untuk penjelasan status code"></button>
+            <span id="result-time" class="result-time"></span>
+            <button id="btn-copy" class="btn btn-ghost btn-small">Copy</button>
+          </div>
+          <pre id="result-body" class="result-body"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Daftar Buku -->
+    <section id="daftar" class="section">
+      <div class="section-head">
+        <h2>📚 Daftar Buku</h2>
+        <p>Data dari <code>GET /api/books</code> — memuat ulang setelah operasi di API Tester.</p>
+      </div>
+
+      <div class="glass card">
+        <div class="toolbar">
+          <input id="filter-search" class="glass-input" type="text" placeholder="Cari judul / penulis...">
+          <button id="btn-load" class="btn btn-primary">Muat Ulang</button>
+        </div>
+        <div id="book-list" class="book-list">
+          <p class="empty">Memuat data...</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Day 5 — Belajar REST API · Node.js + Express + Prisma + PostgreSQL · Liquid Glass</p>
+    </footer>
+  </main>
+
+  <!-- Modal Penjelasan -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal glass" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <span id="modal-badge" class="modal-badge"></span>
+        <button id="modal-close" class="modal-close" aria-label="Tutup">&times;</button>
+      </div>
+      <h3 id="modal-title" class="modal-title"></h3>
+      <div id="modal-content" class="modal-content"></div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/js/learn.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
