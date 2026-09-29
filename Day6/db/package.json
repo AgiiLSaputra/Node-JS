@@ -1,0 +1,22 @@
+{
+  "name": "day6-toko-online",
+  "version": "1.0.0",
+  "description": "Day 6 - Toko Online multi-table dengan Node.js + Express + raw SQL (pg) + PostgreSQL",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "db:init": "node db/init.js",
+    "db:reset": "node db/init.js --reset",
+    "db:seed": "node db/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "pg": "^8.13.3"
+  }
+}
